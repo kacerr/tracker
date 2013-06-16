@@ -7,5 +7,10 @@ class Blogpost extends Eloquent
 	{
 		return $this->belongsTo('User', 'user_id');
 	}
+
+	public function labels()
+	{
+		return $this->belongsToMany('Label', 'blogpost_labels', 'blogpost_id', 'label_id');
+	}
 }
   

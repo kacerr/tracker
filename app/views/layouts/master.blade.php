@@ -59,6 +59,8 @@
 			</ul>
 			<ul class="nav pull-right">
 				@if(Auth::user())
+					<li>{{ HTML::link('measurements','Measurements') }}</li>
+					<li>{{ HTML::link('todo','Todo') }}</li>
 					<li>{{ HTML::link('blogpost','Blog') }}</li>
 					<li>{{ HTML::link('profile','Profile') }}</li>
 					<li>{{ HTML::link('logout','Logout') }}</li>
@@ -69,7 +71,7 @@
 		</div>
 	</div>
 
-	<div class="container">
+	<div class="">
 		@include('plugins.status')
 		@yield('content')
 		<div id="push"></div>

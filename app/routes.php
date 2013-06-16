@@ -34,6 +34,8 @@ Route::get('profile', 'UsersController@getProfile');
 #Route::get('/','HomeController@actionIndex');
 
 Route::resource('blogpost', 'BlogsController');
+Route::resource('todo', 'TodosController');
+Route::resource('measurement', 'MeasurementsController');
 #Route::get('blog', 'BlogsController@show');
 #Route::controller('blog', 'BlogsController');
 #Route::controller('users', 'UsersController');
@@ -41,7 +43,10 @@ Route::resource('blogpost', 'BlogsController');
 Route::get('/codetest', function()
 {
         $bp = Blogpost::find(1);
-        $author = $bp->author();
+        $labels = $bp->labels()->get();
+        echo "<pre>" . print_r($labels, true) . "</pre>";
+        #$author = $bp->author();
+        #$labels = $bp->Labels();
         #$bp->create(array('title' => '1st post','content' => 'blogpost content'));
         # var_dump($author)       ;
         #echo "" . "<br>";
@@ -52,6 +57,16 @@ Route::get('/codetest', function()
         #Event::fire('laravel.query', array('sql' => 'are you going to do something?'));
         #->insert(array('title' => '1st post','content' => 'blogpost content'));
         return View::make('index')->with('title', 'code:test');
+
+        
+        /*$handle = fopen("http://dev.web-goodies.eu/tmp/auta.txt", "r");
+        $contents = fread($handle, 10000);
+        echo "-------- contents before conversion: <br><hr>";
+        echo $contents;
+        echo "<br><br> ------- after conversion: <br><hr>";
+        $contentsConverted = iconv("Windows-1250", "UTF-8", $contents);
+        echo $contentsConverted;
+        */
 });
 
 Route::get('/index', function()

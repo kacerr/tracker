@@ -2,15 +2,14 @@
 
 @section('content')
 <div class="row">
-	<div class="span12">
-		<div class="well">
+	<div class="span12 offset3 well ">
 			<legend>
-				Blogs listing
+				{{ $title }}
 				<span class="nav pull-right">
 					{{ HTML::link('blogpost/create','add post') }}
 				</span>
 			</legend>
-			@foreach (Blogpost::all() as $blogpost)
+			@foreach ($blogposts as $blogpost)
 				@if ($blogpost->visible)
 					<span>
 				@else
@@ -28,7 +27,15 @@
 				<hr>
 					</span>
 			@endforeach
-		</div>
+	</div>
+	<div class="span1 well pull-left">
+		Labels: <br>
+		{{ HTML::link('blogpost', 'all') }}
+		<br>
+		@foreach ($labels as $label)
+			{{ HTML::link('blogpost?label=' . $label->id, $label->label) }}
+			<br>
+		@endforeach
 	</div>
 </div>
 @stop

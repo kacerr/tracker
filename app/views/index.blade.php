@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="row">
-	<div class="span12 well">
+	<div class="span12 offset3 well">
 
 	What to say about that? I was thinking for longer time about writing some kind of "tracker" for me. It can track workouts, food consumption, money expenditures, weight, work progress ... just about anything.
 
@@ -12,16 +12,24 @@
 
 	</div>
 </div>
+@foreach (Blogpost::where('visible', '=', '1')->get() as $blogpost)
 <div class="row">
-	@foreach (Blogpost::where('visible', '=', '1')->get() as $blogpost)
-	<div class="span12">
+	<div class="span12 offset3">
 		<div class="hero-unit" style="padding:20px;">
-			<h1 style="display: inline;">{{ $blogpost->title }} </h1> posted by: {{ $blogpost->author->email }} / {{  $blogpost->updated_at }}
+			<h1 style="">{{ $blogpost->title }} </h1> 
+			<p style="line-height: 20px; padding: 2px;">
+				posted by: {{ $blogpost->author->email }} / {{  $blogpost->updated_at }}
+				<br />
+				labels:
+				@foreach ($blogpost->labels()->get() as $label)
+					{{ $label->label }}
+				@endforeach
+			</p>
 			<hr style="border-color:black;">
 			<p>{{ $blogpost->content }}</p>
 		</div>
 	</div>
-	@endforeach
 </div>
+@endforeach
 
 @stop

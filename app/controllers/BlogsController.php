@@ -5,12 +5,20 @@ class BlogsController extends BaseController
 
 	public function index()
 	{
-		return View::make('blogpost.index')->with(array("title" => "Blogs listing"));
+		$input = Input::all();
+		if (isset($input['label']))
+		{
+			$blogposts = Label::find($input['label'])->blogposts()->get();
+		}
+		else $blogposts = Blogpost::all();
+		$labels = Label::all();
+
+		return View::make('blogpost.index')->with(array("title" => "Blogs listing", "blogposts" => $blogposts, "labels" => $labels));
 	}
 
 	public function create()
 	{
-		return View::Make('blogpost.new')->with(array("title" => "Blogs - add blogpost"));;
+		return View::Make('blogpost.new')->with(array("title" => "Blogs - add blogpost", "setLabels" => null));;
 	}
 
 	public function destroy($id)
@@ -23,7 +31,8 @@ class BlogsController extends BaseController
 	public function edit($id)
 	{
 		$blogpost = Blogpost::find($id);
-		return View::Make('blogpost.new')->with(array("title" => "Blogs - edit blogpost", "action" => "edit", "blogpost" => $blogpost));
+		$setLabels = $blogpost->labels()->get();
+		return View::Make('blogpost.new')->with(array("title" => "Blogs - edit blogpost", "action" => "edit", "blogpost" => $blogpost, "setLabels" => $setLabels));
 	}
 
 
@@ -61,6 +70,18 @@ class BlogsController extends BaseController
     		if (isset($input['visible']) &&  $input['visible']=="1") $blogpost->visible=true;
     		else $blogpost->visible=false;
     		$blogpost->save();
+
+    		# we need to "attach" and "detach" labels
+    		# seems to be too difficult, easier solution would be calling own sql query
+    		$setOfLabels = "(" . implode($input['label'], ',') . ")";
+    		# first of all we delete all labels for this post
+    		DB::table('blogpost_labels')
+    			->where('blogpost_id', '=', $blogpost->id)->delete();
+    		# and then we add currently set labels
+    		foreach ($input['label'] as $key => $value) {
+    			DB::table('blogpost_labels')->insert(array("blogpost_id" => $blogpost->id, "label_id" => $value));
+    		}
+    		#echo "<pre>" . print_r($setOfLabels, true) . "</pre>";
 
     		if (isset($input['id']))
     			return Redirect::to('blogpost')->with('flash_notice', "Blogpost id: $blogpost->id was updated.");

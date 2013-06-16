@@ -100,7 +100,7 @@ class UsersController extends BaseController
       }
       else
       {
-        return Redirect::to('login')->with('flash_notice', 'New login: ' . $input['email'] . ' was sucessfully created');;
+        return Redirect::to('login')->with('flash_notice', 'New login: ' . $input['email'] . ' was sucessfully created');
       }
     }
   }

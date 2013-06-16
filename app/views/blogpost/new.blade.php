@@ -4,7 +4,8 @@
 <div class="row">
 	<div class="span8 offset2">
 		<div class="well">
-			<? /* quick fix for the "action" variable */
+			<?php /* quick fix for the "action" variable */
+			/* all variables should be prepared before we start displaying the view !!!! */
 			if (!isset($action)) $action="";
 			/* end of fix */
 			?>
@@ -29,7 +30,13 @@
 				@else
 					{{ Form::checkbox('visible','1', 'false',  array('id' => 'chkVisible', 'class' => 'span7', 'placeholder' => 'blog content')) }}
 				@endif
-			 </label> 
+			</label>
+			<br>
+			Labels: 
+			@foreach (Label::all() as $label)
+					{{ Form::checkbox('label[]',$label->id, Label::isLabelSet($label->id, $setLabels), array('id' => 'chkLabel' . $label->id)) }}
+					<label for "{{ $label->id }}" style="display: inline;">{{$label->label}}</label>
+			@endforeach
 			<br>
 			{{ Form::submit('Save post', array('class' => 'btn btn-warning')) }}
 
