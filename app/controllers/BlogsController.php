@@ -73,13 +73,15 @@ class BlogsController extends BaseController
 
     		# we need to "attach" and "detach" labels
     		# seems to be too difficult, easier solution would be calling own sql query
-    		$setOfLabels = "(" . implode($input['label'], ',') . ")";
     		# first of all we delete all labels for this post
     		DB::table('blogpost_labels')
     			->where('blogpost_id', '=', $blogpost->id)->delete();
     		# and then we add currently set labels
-    		foreach ($input['label'] as $key => $value) {
-    			DB::table('blogpost_labels')->insert(array("blogpost_id" => $blogpost->id, "label_id" => $value));
+    		if (isset($input['label']))
+    		{
+				foreach ($input['label'] as $key => $value) {
+    				DB::table('blogpost_labels')->insert(array("blogpost_id" => $blogpost->id, "label_id" => $value));
+    			}
     		}
     		#echo "<pre>" . print_r($setOfLabels, true) . "</pre>";
 

@@ -42,9 +42,28 @@ Route::resource('measurement', 'MeasurementsController');
 #Route::get('/users','UsersController@actionIndex');
 Route::get('/codetest', function()
 {
-        $bp = Blogpost::find(1);
-        $labels = $bp->labels()->get();
-        echo "<pre>" . print_r($labels, true) . "</pre>";
+        /* flot test */
+        $sHTML=<<< EOF
+                <html>
+                <script src="/js/jquery.js"></script>
+                <script src="/js/jquery.flot.js"></script>
+                <script language="javascript">
+                        $( document ).ready(function() {
+                                $.plot($("#placeholder"), [ [[1, 171], [2, 172], [3,170] ] ], { yaxis: { max: 200, min:1 } });
+                        });
+                </script>
+                <body>
+                                <div id="placeholder" style="width:600px;height:300px"></div>
+                </body>
+                </html>
+EOF;
+        echo ($sHTML);
+        die;
+        
+
+        #$bp = Blogpost::find(1);
+        #$labels = $bp->labels()->get();
+        #echo "<pre>" . print_r($labels, true) . "</pre>";
         #$author = $bp->author();
         #$labels = $bp->Labels();
         #$bp->create(array('title' => '1st post','content' => 'blogpost content'));
@@ -56,7 +75,7 @@ Route::get('/codetest', function()
 
         #Event::fire('laravel.query', array('sql' => 'are you going to do something?'));
         #->insert(array('title' => '1st post','content' => 'blogpost content'));
-        return View::make('index')->with('title', 'code:test');
+        #return View::make('index')->with('title', 'code:test');
 
         
         /*$handle = fopen("http://dev.web-goodies.eu/tmp/auta.txt", "r");

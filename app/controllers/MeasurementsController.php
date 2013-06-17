@@ -5,7 +5,22 @@ class MeasurementsController extends BaseController
 
 	public function index()
 	{
-		return View::make('measurement.index')->with(array("title" => "measurements listing"));
+		$input = Input::all();
+		$user = Auth::user();
+		if (isset($input['json']))
+		{
+			if (!isset($input['name'])) $measurementName = "weight";
+			else $measurementName=$input['name'];
+			$measurements = Measurement::whereRaw('user_id = ? and name = ?', array($user->id, $measurementName))->orderBy('taken')->get();
+			$outArray = array();
+			foreach ($measurements as $measurement)
+			{
+				$oDate = new DateTime($measurement->taken);
+				array_push($outArray, array($oDate->format("U"), $measurement->value));
+			}
+			echo(json_encode($outArray));
+		}
+		else return View::make('measurement.index')->with(array("title" => "measurements listing"));
 	}
 
 	public function create()
