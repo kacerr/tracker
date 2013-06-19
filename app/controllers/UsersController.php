@@ -53,7 +53,76 @@ class UsersController extends BaseController
     $title = "register user";
     return View::make('user.register')
       ->with('title', $title);
-  } 
+  }
+
+  public function getRecover()
+  {
+    $input = Input::all();
+    if (isset($input['email']))
+    {
+      $user = User::where('email' , '=', $input['email'])->first();
+      //echo "<pre>" . var_dump($user) . "</pre>";
+      //die;
+      if ($user!=null)
+      {
+        $passwordRecovery = new PasswordRecovery;
+        $passwordRecovery->user_id=$user->id;
+        $passwordRecovery->token = uniqid();
+        $passwordRecovery->valid_to = (new DateTime())->add(new DateInterval('P1D'));
+        $passwordRecovery->save();
+
+        # and we need to send an email also
+        $data = array ("token" => $passwordRecovery->token, "user" => $user);
+        Mail::send('emails.recovery', $data, function($message) use ($data)
+        {
+            $message->to($data['user']->email, $data['user']->name . " " . $data['user']->surname)->subject('Tracker APP password recovery');
+        });
+
+        return View::make('user.recover')->with(array('user' => $user, 'title' => 'password recovery'));
+      }
+      else
+      {
+        return $this->getIndex(); 
+      }
+    }
+    else
+    {
+        
+    }
+    
+  }
+
+  public function passwordResetForm($token)
+  {
+    #echo "here we gonna reset the password. Token is: $token";
+    $passwordRecovery = PasswordRecovery::where('token', '=', $token)->first();
+    if (!is_null($passwordRecovery))
+    {
+      return View::make('user.reset')->with(array('title' => 'Password reset',  'passwordRecovery' => $passwordRecovery));
+    }
+    else
+    {
+      echo "Invalid token, i can't do anything for you!";
+    }
+  }
+
+  public function passwordReset()
+  {
+    $input = Input::all();
+    $passwordRecovery = PasswordRecovery::where('token', '=', $input['token'])->first();
+    if (!is_null($passwordRecovery) && $passwordRecovery->user_id == $input['user_id'] && $passwordRecovery->valid_to < new DateTime())
+    {
+      $user = User::find($passwordRecovery->user_id);
+      $user->password = User::makePassword($input['password']);
+      $user->save();
+      PasswordRecovery::where('token', '=', $input['token'])->delete();
+      return Redirect::to('login')->with('flash_notice', 'Your password was updated!');
+    }
+    else
+    {
+      echo "I'm sorry, your request cannot be completed, either token is wrong, or it has expired!";
+    }
+  }
 
   public function postRegister()
   {
@@ -86,7 +155,7 @@ class UsersController extends BaseController
       else 
       {
         $user = new User;
-        $password = Hash::make($input['password']);
+        $password = User::makePassword($input['password']);
         $user->password = $password;
         $user->email = $input['email'];
       }

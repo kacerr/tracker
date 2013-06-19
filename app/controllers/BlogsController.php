@@ -8,12 +8,14 @@ class BlogsController extends BaseController
 		$input = Input::all();
 		if (isset($input['label']))
 		{
-			$blogposts = Label::find($input['label'])->blogposts()->get();
+			$blogposts = Label::find($input['label'])->blogposts()->orderBy('updated_at', 'desc')->get();
 		}
-		else $blogposts = Blogpost::all();
+		else $blogposts = Blogpost::orderBy('updated_at', 'desc')->get();
 		$labels = Label::all();
 
-		return View::make('blogpost.index')->with(array("title" => "Blogs listing", "blogposts" => $blogposts, "labels" => $labels));
+		if (Auth::user()) $currentUser = Auth::user();
+		else $currentUser = null;
+		return View::make('blogpost.index')->with(array("title" => "Blogs listing", "blogposts" => $blogposts, "labels" => $labels, "currentUser" => $currentUser));
 	}
 
 	public function create()

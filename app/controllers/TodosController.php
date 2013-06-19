@@ -29,8 +29,8 @@ class TodosController extends BaseController
 
 	public function show()
 	{
-		return "show method, gonna show element: ";
-		#return View::make('todo.index')->with(array("title" => "Todos listing"));
+		#return "show method, gonna show element: ";
+		return View::make('todo.index')->with(array("title" => "Todos listing"));
 	}
 
 	public function store()

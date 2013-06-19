@@ -5,6 +5,11 @@ class User extends Eloquent implements UserInterface
 {
   protected $table = 'users';
 
+  public static function makePassword($textPassword)
+  {
+    return Hash::make($textPassword);
+  }
+
   /* relationships */
   public function blogposts()
   {

@@ -6,6 +6,7 @@
 	{{ HTML::style('css/bootstrap.css') }}
 	{{ HTML::script('js/jquery.js') }}
 	{{ HTML::script('js/bootstrap.js') }}
+	{{ HTML::script('js/tracker-help.js') }}
 
     <style type="text/css">
 

@@ -17,9 +17,7 @@
 					<span style="color: lightsteelblue;">
 				@endif
 				<b>{{ $measurement->name }}: </b>{{ $measurement->value }}, taken: {{ $measurement->taken }} </b>
-				{{ Form::open(array('url' => '/measurement/' . $measurement->id, 'method' => 'DELETE', 'style' => 'display: inline;')) }}
-					{{ Form::submit('delete', array('class' => 'btn-mini btn-danger')) }}
-			    {{ Form::close() }}
+                {{ Form::button('delete', array('class' => 'btn-mini btn-danger', 'onclick' => 'confirmDelete("measurement",' . $measurement->id . ')')) }}
 				{{ Form::open(array('url' => '/measurement/' . $measurement->id . "/edit/", 'method' => 'GET', 'style' => 'display: inline;')) }}
 					{{ Form::submit('edit', array('class' => 'btn-mini btn-warning')) }}
 			    {{ Form::close() }}
@@ -31,6 +29,26 @@
 		</div>
 	</div>
 </div>
+
+<!-- Modal deletion confirmation -->
+<div id="confirmDeleteDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Delete item confirmation</h3>
+  </div>
+  <div class="modal-body">
+    <p>Are you sure you want to delete item with id: <span id="idToDelete"></span></p>
+  </div>
+  <div class="modal-footer">
+    <form id="deleteForm" method="POST" action="" style="inline">
+        <input type="hidden" name="_method" value="DELETE">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <input type="submit" value="Delete !!!" class="btn btn-primary"></input>
+    </form>
+  </div>
+</div>
+
+
 <!-- experimental graph drawing -->
 <script src="/js/jquery.flot.js"></script>
 <script src="/js/jquery.flot.time.js"></script>
