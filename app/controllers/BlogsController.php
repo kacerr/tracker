@@ -5,16 +5,56 @@ class BlogsController extends BaseController
 
 	public function index()
 	{
-		$input = Input::all();
-		if (isset($input['label']))
-		{
-			$blogposts = Label::find($input['label'])->blogposts()->orderBy('updated_at', 'desc')->get();
-		}
-		else $blogposts = Blogpost::orderBy('updated_at', 'desc')->get();
-		$labels = Label::all();
-
+		/* it alreaady starts getting mor complicated
+		- view only :: view_only == true :: show view only all posts with the label (if set)
+		- other :: isAdmin == true :: show editable all items
+		- other :: isAdmin == false :: show only users own items
+		*/
 		if (Auth::user()) $currentUser = Auth::user();
 		else $currentUser = null;
+
+		/* TODO: probably move to filter 
+			if we don't have logged user -> redirect to login */
+
+		if ($currentUser===NULL) return Redirect::to('/login');
+
+
+		$input = Input::all();
+
+		if ((isset($input['view_only']) && $input['view_only']))
+		{
+			if (isset($input['label']))
+			{
+				$blogposts = Label::find($input['label'])->blogposts()->orderBy('updated_at', 'desc')->get();
+			}
+			else $blogposts = Blogpost::orderBy('updated_at', 'desc')->get();			
+		}
+		else
+		{
+			if ($currentUser!==NULL && $currentUser->isAdmin())
+			{
+				/* user is admin / has permissions to edit ALL posts */
+				if (isset($input['label']))
+				{
+					$blogposts = Label::find($input['label'])->blogposts()->orderBy('updated_at', 'desc')->get();
+				}
+				else $blogposts = Blogpost::orderBy('updated_at', 'desc')->get();
+			}
+			else
+			{
+				/* he can work with his own items only */
+				if (isset($input['label']))
+				{
+					$blogposts = Label::find($input['label'])->blogposts()->where('user_id', '=', $currentUser->id)->orderBy('updated_at', 'desc')->get();
+				}
+				else $blogposts = Blogpost::where('user_id', '=', $currentUser->id)->orderBy('updated_at', 'desc')->get();
+			}
+
+		}
+
+		$labels = Label::all();
+
+		
 		return View::make('blogpost.index')->with(array("title" => "Blogs listing", "blogposts" => $blogposts, "labels" => $labels, "currentUser" => $currentUser));
 	}
 

@@ -197,4 +197,13 @@ class UsersController extends BaseController
     Auth::logout();
     return Redirect::to('/');
   }
+
+  public function showDashboard()
+  {
+    $title = 'user dashboard';
+    if (Auth::user()) $user = Auth::user();
+    else return Redirect::to('/login');
+    $data = compact('user', 'title');
+    return View::make('user.dashboard', $data);
+  }
 }

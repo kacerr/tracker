@@ -30,6 +30,7 @@ Route::post('login', 'UsersController@postLogin');
 Route::get('logout', 'UsersController@getLogout');
 Route::get('register', 'UsersController@getRegister');
 Route::get('recover', 'UsersController@getRecover');
+Route::get('user/dashboard', 'UsersController@showDashboard');
 Route::post('recover', 'UsersController@getRecover');
 Route::get('password/reset/{token}', 'UsersController@passwordResetForm');
 Route::post('password/reset', 'UsersController@passwordReset');

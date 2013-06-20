@@ -75,5 +75,4 @@ class PhotoController extends \BaseController {
 	{
 		//
 	}
-
 }

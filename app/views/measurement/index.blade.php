@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="row">
-	<div class="span12 offset3">
+	<div class="span6 offset1">
 		<div class="well">
 			<legend>
 				{{ $title }}
@@ -10,7 +10,7 @@
 					{{ HTML::link('measurement/create','add measurement') }}
 				</span>
 			</legend>
-			@foreach (measurement::all() as $measurement)
+			@foreach ($measurements as $measurement)
 				@if ($measurement->visible)
 					<span>
 				@else
@@ -28,7 +28,25 @@
 			@endforeach
 		</div>
 	</div>
+    <div class="span8 well">
+        <div id="placeholder" style="width:600px;height:300px"></div>
+        <div class="data" id="data"></div>
+    </div>
+    <div class="span2 well pull-left">
+        Measurement names: <br>
+        {{ HTML::link('/measurement', 'all') }}
+        {{ Form::open(array('url' => '/measurement', 'method' => 'GET')) }}
+        @for ($i = 0; $i < count($measurementNames); $i++)
+            {{ Form::checkbox('name[]',$measurementNames[$i]->name, in_array($measurementNames[$i]->name, $names), array('id' => 'chkName' . $measurementNames[$i]->name)) }}
+            <label for "{{ $measurementNames[$i]->name }}" style="display: inline;">{{$measurementNames[$i]->name }}</label>
+            <br>
+        @endfor
+        <br>
+        {{ Form::submit('Go !', array('class' => 'btn-small btn-warning')) }}
+        {{ Form::close() }}
+    </div>
 </div>
+
 
 <!-- Modal deletion confirmation -->
 <div id="confirmDeleteDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -55,62 +73,50 @@
 <script language="javascript">
     $( document ).ready(function() 
     {
-        request='/measurement?json=true&name=weight';
+        request='{{ $graphsRequest }}';
+        //alert(request);
         //jsDebug(request);
         getResult=$.ajax({url: request, dataType: 'json', async: false});
         if (getResult.status=='200')
         {
+            var aValues  = [];
+            var aLabels = [];
+            var iCounter = 0;
             oObjects = $.parseJSON(getResult.responseText);
-            var aValues	 = [];
-            htmlValues = '';
-            for (i in oObjects)
+            //alert (var_dump(oObjects));
+            for (measurement in oObjects)
             {
-            	aValues.push([oObjects[i][0]*1000, parseInt(oObjects[i][1])]);
-            	htmlValues += oObjects[i][0]*1000 + ', ' + oObjects[i][1] + '<br>';
+                
+                aLabels[iCounter] = measurement;
+                aValues[iCounter]  = [];
+                for (i in oObjects[measurement])
+                {
+                    aValues[iCounter].push([oObjects[measurement][i][0]*1000, parseInt(oObjects[measurement][i][1])]);
+                }
+                iCounter++;
             }
-            
-    
-		    $.plot($("#placeholder"), [ aValues ], {
-        			xaxis: { 
-        			 mode: "time", 
-        			 min: new Date(2013, 5, 8).getTime(),
-        			 max: new Date(2013, 5, 22).getTime(),
-        			 minTickSize: [1, "day"], 
-        			 timeformat: "%d.%m.%Y"}
-        			}
-        		);
+            //alert (var_dump(aValues));
+            //alert(aValues[0]);
 
-            /*alert(aValues);
-            var d2 = [[0, 3], [4, 8], [8, 5], [9, 13]];
-            #alert (d2);
-            $('#data').html(htmlValues);
-        	#$.plot($("#placeholder"), d2);
-
-        	/*, { 
-        			yaxis: { }, 
-        			xaxis: { 
-        			}
-        		});
-        	/*
-        				max: 200, min:1 
-        				min: 1371081600000,
-        				max: 1371349000000
-        			 mode: "time", 
-        			 min: new Date(2013, 5, 8).getTime(),
-        			 max: new Date(2013, 5, 22).getTime(),
-        			 minTickSize: [1, "day"], 
-        			 timeformat: "%d.%m.%Y"}
+            /* we need to prepare array for ploting with labels */
+            var aData = [];
+            for (i=0; i<aValues.length; i++)
+            {
+                aData.push({data: aValues[i], label: aLabels[i]});
+            }
+            //alert (aData);
 
 
-        	*/
-        	//alert (new Date(2013, 4, 0).getTime() + ' -  ' + new Date(2013, 6, 31).getTime());
+            $.plot($("#placeholder"), aData, {
+                    xaxis: { 
+                     mode: "time", 
+                     min: new Date(2013, 5, 8).getTime(),
+                     max: new Date(2013, 5, 22).getTime(),
+                     minTickSize: [1, "day"], 
+                     timeformat: "%d.%m.%Y"}
+                    }
+                    );
         }
     });
 </script>
-<div class="row">
-	<div class="span9 offset3 well">
-		<div id="placeholder" style="width:600px;height:300px"></div>
-		<div class="data" id="data"></div>
-	</div>
-</div>
 @stop

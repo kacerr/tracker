@@ -15,6 +15,10 @@ class User extends Eloquent implements UserInterface
   {
     return $this->hasMany('Blogpost');
   }
+  public function measurements()
+  {
+    return $this->hasMany('Measurement');
+  }
 
   /**
   * Get the unique identifier for the user.
@@ -34,5 +38,11 @@ class User extends Eloquent implements UserInterface
   public function getAuthPassword()
   {
 	return $this->password;
+  }
+
+  public function isAdmin()
+  {
+    if ($this->user_class>=99) return true;
+    else return false;
   }
 }

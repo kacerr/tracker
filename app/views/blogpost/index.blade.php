@@ -24,7 +24,7 @@
 				    {{ Form::close() }}
 			    @endif
 				<br>
-				{{ $blogpost->content }}
+				{{ $blogpost->getHTMLContent() }}
 				<hr>
 					</span>
 			@endforeach

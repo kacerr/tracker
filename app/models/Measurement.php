@@ -8,5 +8,13 @@ class Measurement extends Eloquent
 	{
 		return $this->belongsTo('User', 'user_id');
 	}
+
+	public static function getUserMeasurementNames($userID)
+	{
+		/* returns array of existing user measurement names */
+		$names = DB::select('SELECT DISTINCT name FROM measurements WHERE user_id=? ', array($userID));
+		return ($names);
+	}
+
 }
   

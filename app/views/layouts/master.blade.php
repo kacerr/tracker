@@ -46,7 +46,12 @@
  <!--<div id="wrap">-->
 	<div class="navbar">
 		<div class="navbar-inner">
-			{{ HTML::link('/', 'TRaCKer', array('class' => 'brand')) }}
+			@if(Auth::user())
+				{{ HTML::link('/', 'TRaCKer::home', array('class' => 'brand')) }}
+				{{ HTML::link('/user/dashboard', 'dashboard', array('class' => 'brand')) }}
+			@else
+				{{ HTML::link('/', 'TRaCKer', array('class' => 'brand')) }}
+			@endif
 			<ul class="nav pull-left">
 				<li>{{ HTML::link('/codetest', 'test:code') }}</li>
 				<li>{{ HTML::link('/download/tracker.tar.bz2', 'code:download') }}</li>
@@ -91,7 +96,7 @@
 					echo "\$_GET :: ";
 					foreach ($_GET as $key => $value)
 					{
-						echo "<b>$key => </b>$value&nbsp;&nbsp; ";
+						echo "<b>" . htmlspecialchars($key) ." => </b>$value&nbsp;&nbsp; ";
 					}
 					echo "<br>";
 					echo "\$_POST :: ";
