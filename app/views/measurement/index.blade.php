@@ -7,24 +7,22 @@
 			<legend>
 				{{ $title }}
 				<span class="nav pull-right">
-					{{ HTML::link('measurement/create','add measurement') }}
+                    <a href="/measurement/create">
+                        <button class="btn-tracker-default"><i class="icon-plus _icon-large"></i>add</button>
+                    </a>    
 				</span>
 			</legend>
 			@foreach ($measurements as $measurement)
-				@if ($measurement->visible)
-					<span>
-				@else
-					<span style="color: lightsteelblue;">
-				@endif
-				<b>{{ $measurement->name }}: </b>{{ $measurement->value }}, taken: {{ $measurement->taken }} </b>
-                {{ Form::button('delete', array('class' => 'btn-mini btn-danger', 'onclick' => 'confirmDelete("measurement",' . $measurement->id . ')')) }}
-				{{ Form::open(array('url' => '/measurement/' . $measurement->id . "/edit/", 'method' => 'GET', 'style' => 'display: inline;')) }}
-					{{ Form::submit('edit', array('class' => 'btn-mini btn-warning')) }}
-			    {{ Form::close() }}
-					</span>
-					<br>
-					{{ $measurement->description }}
-					<div style="height:8px; margin-top: 4px; border-top: 1px black solid;">&nbsp;</div>
+                <div>
+    				<b>{{ $measurement->name }}: </b>{{ $measurement->value }}, taken: {{ $measurement->taken }} </b>
+                    <div class="pull-right">
+                    {{ Form::open(array('id' => 'edit_' . $measurement->id, 'url' => '/measurement/' . $measurement->id . "/edit/", 'method' => 'GET', 'style' => 'display: inline;')) }}
+                        <button class="btn-tracker-default" onclick="$('#edit_{{ $measurement->id }}').submit();" title="edit"><i class="icon-edit _icon-large"></i></button>
+                    {{ Form::close() }}
+                    <button class="btn-tracker-default" onclick="confirmDelete('measurement', '{{ $measurement->id }}')" title="delete"><i class="icon-trash _icon-large"></i></button>
+                    </div>
+                </div>
+				<div style="height:8px; margin-top: 4px; border-top: 1px black solid;">&nbsp;</div>
 			@endforeach
 		</div>
 	</div>

@@ -4,6 +4,7 @@
 	<meta charset="UTF-8">
 	<title>{{ $title }}</title>
 	{{ HTML::style('css/bootstrap.css') }}
+	{{ HTML::style('css/tracker.css') }}
 	{{ HTML::script('js/jquery.js') }}
 	{{ HTML::script('js/bootstrap.js') }}
 	{{ HTML::script('js/tracker-help.js') }}

@@ -8,30 +8,33 @@
 			<legend>
 				{{ $title }}
 				<span class="nav pull-right">
-					{{ HTML::link('todo/create','add todo') }}
+					<a href="/todo/create">
+						<button class="btn-tracker-default"><i class="icon-plus _icon-large"></i>add todo</button>
+					</a>	
 				</span>
 			</legend>
 			@foreach (Todo::all() as $todo)
-				@if ($todo->visible)
-					<span>
-				@else
-					<span style="color: lightsteelblue;">
-				@endif
-				@if ($todo->status==3) <?php $statusClass="text-success"; ?>
+				@if ($todo->status==3) <?php $statusClass="text-success _completed"; ?>
+				@elseif ($todo->status==2) <?php $statusClass="_in_progress"; ?>
 				@else <?php $statusClass="";?>
 				@endif
-				<div class="{{ $statusClass }}">
+				@if ($todo->visible)
+				@else
+					<?php $statusClass.=" _not_visible"; ?>
+				@endif
+				<div class="{{ $statusClass }}" style="display: inline;">
 				<b>{{ $todo->topic }}</b>, posted by: {{ $todo->author->email }} </b>
-				<!--{{ Form::open(array('url' => '/todo/' . $todo->id, 'method' => 'DELETE', 'style' => 'display: inline;')) }} -->
-					{{ Form::button('delete', array('class' => 'btn-mini btn-danger', 'onclick' => 'confirmDelete("todo", ' . $todo->id . ')')) }}
-			    <!--{{ Form::close() }} -->
-				{{ Form::open(array('url' => '/todo/' . $todo->id . "/edit/", 'method' => 'GET', 'style' => 'display: inline;')) }}
-					{{ Form::submit('edit', array('class' => 'btn-mini btn-warning')) }}
-			    {{ Form::close() }}
-					</span>
-					<br>
+				</div>
+				<div class="inline" style="margin-left: 8px; padding: 2px; display: inline;">
+					{{ Form::open(array('id' => 'edit_' . $todo->id, 'url' => '/todo/' . $todo->id . "/edit/", 'method' => 'GET', 'style' => 'display: inline;')) }}
+						<button class="btn-tracker-default" onclick="$('#edit_{{ $todo->id }}').submit();" title="edit"><i class="icon-edit _icon-large"></i></button>
+				    {{ Form::close() }}
+					<button class="btn-tracker-default" onclick="confirmDelete('todo', '{{ $todo->id }}')" title="delete"><i class="icon-trash _icon-large"></i></button>
+				</div>
+				<div class="{{ $statusClass }}">
 					{{ $todo->description }}
 				</div>
+				
 				<div style="height:8px; margin-top: 4px; border-top: 1px black solid;">&nbsp;</div>
 			@endforeach
 		</div>

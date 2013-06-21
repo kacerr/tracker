@@ -2,10 +2,12 @@
 
 @section('content')
 <div class="row">
+	<!--
 	<div class="span2 well">
 		{{ $user->name }} welcome to your dashboard
 	</div>
-	<div class="span6 offset2" style="padding:5px;">
+	-->
+	<div class="span6 offset3" style="padding:5px;">
 		<div class="span3" style="margin-left: 0px; padding-left:0px;">
 			<div class="span3">
 				<a href="/measurement"><img src="/images/home/graphs_measurements.jpg" width="200" height="200" class="img-circle"></a>

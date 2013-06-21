@@ -1,0 +1,22 @@
+._completed
+{
+	text-decoration: line-through;
+}
+
+._in_progress
+{
+	color: orange;
+}
+
+._not_visible
+{
+	color: lightSteelBlue;
+}
+
+._icon-large
+{
+	 zoom: 1.2;
+}
+
+.btn-tracker-default { background-color: lightGrey; border: 0px;}
+.btn-tracker-default:hover { background-color: grey; }

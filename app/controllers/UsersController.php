@@ -31,7 +31,7 @@ class UsersController extends BaseController
       $credentials = array('email' => $input['email'], 'password' => $input['password']);
       if (Auth::attempt($credentials))
       {
-        return Redirect::to('profile')->with('flash_notice', 'You are successfully logged in.');
+        return Redirect::to('/user/dashboard')->with('flash_notice', 'You are successfully logged in.');
       }
       else
       {

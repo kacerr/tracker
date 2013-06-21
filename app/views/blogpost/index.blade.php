@@ -6,27 +6,34 @@
 			<legend>
 				{{ $title }}
 				<span class="nav pull-right">
-					@if ($currentUser) {{ HTML::link('blogpost/create','add post') }}
+					@if ($currentUser) 
+						<a href="/blogpost/create">
+							<button class="btn-tracker-default"><i class="icon-plus _icon-large"></i>add post</button>
+						</a>
 					@endif
 				</span>
 			</legend>
 			@foreach ($blogposts as $blogpost)
-				@if ($blogpost->visible)
-					<span>
-				@else
-					<span style="color: lightsteelblue;">
-				@endif
-				<b>{{ $blogpost->title }} </b>, posted {{ $blogpost->updated_at->format("d.m.Y") }} by: {{ $blogpost->author->email }} </b>
-				@if ($currentUser) 
-					{{ Form::button('delete', array('class' => 'btn-mini btn-danger', 'onclick' => 'confirmDelete("blogpost", ' . $blogpost->id . ')')) }}						
-					{{ Form::open(array('url' => '/blogpost/' . $blogpost->id . "/edit/", 'method' => 'GET', 'style' => 'display: inline;')) }}
-						{{ Form::submit('edit', array('class' => 'btn-mini btn-warning')) }}
-				    {{ Form::close() }}
-			    @endif
-				<br>
-				{{ $blogpost->getHTMLContent() }}
-				<hr>
+				<div style="margin-top: 10px;">
+					@if ($blogpost->visible)
+						<span>
+					@else
+						<span style="color: lightsteelblue;">
+					@endif
+					<b>{{ $blogpost->title }} </b>, posted {{ $blogpost->updated_at->format("d.m.Y") }} by: {{ $blogpost->author->email }} </b>
+					@if ($currentUser) 
+						{{ Form::open(array('id' => 'edit_' . $blogpost->id, 'url' => '/blogpost/' . $blogpost->id . "/edit/", 'method' => 'GET', 'style' => 'display: inline;')) }}
+							<button class="btn-tracker-defaul
+							t" onclick="$('#edit_{{ $blogpost->id }}').submit();" title="edit"><i class="icon-edit _icon-large"></i></button>
+					    {{ Form::close() }}
+						<button class="btn-tracker-default" onclick="confirmDelete('blogpost', '{{ $blogpost->id }}')" title="delete"><i class="icon-trash _icon-large"></i></button>
+				    @endif
+					<br>
+					{{ $blogpost->getHTMLContent() }}
 					</span>
+				</div>
+				<div style="height:8px; margin-top: 4px; border-top: 1px black solid;">&nbsp;</div>
+
 			@endforeach
 	</div>
 	@if ($currentUser) 
