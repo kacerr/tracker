@@ -6,22 +6,18 @@ class BlogsController extends BaseController
 	public function index()
 	{
 		/* it alreaady starts getting mor complicated
-		- view only :: view_only == true :: show view only all posts with the label (if set)
+		- view only :: viewOnly == true :: show view only all posts with the label (if set)
 		- other :: isAdmin == true :: show editable all items
 		- other :: isAdmin == false :: show only users own items
 		*/
 		if (Auth::user()) $currentUser = Auth::user();
 		else $currentUser = null;
 
-		/* TODO: probably move to filter 
-			if we don't have logged user -> redirect to login */
-
-		if ($currentUser===NULL) return Redirect::to('/login');
 
 
 		$input = Input::all();
 
-		if ((isset($input['view_only']) && $input['view_only']))
+		if ((isset($input['viewOnly']) && $input['viewOnly']))
 		{
 			if (isset($input['label']))
 			{
@@ -31,6 +27,11 @@ class BlogsController extends BaseController
 		}
 		else
 		{
+			/* TODO: probably move to filter 
+				if we don't have logged user -> redirect to login */
+
+			if ($currentUser===NULL) return Redirect::to('/login');
+
 			if ($currentUser!==NULL && $currentUser->isAdmin())
 			{
 				/* user is admin / has permissions to edit ALL posts */
