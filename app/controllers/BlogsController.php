@@ -3,6 +3,15 @@ class BlogsController extends BaseController
 {
 	public $restful = true;
 
+	/*
+	protected $perPage;
+
+	public function __construct()
+	{
+		$this->perPage = Config::get('tracker.pagination-blog');		
+	}
+	*/
+
 	public function index()
 	{
 		/* it alreaady starts getting mor complicated
@@ -16,14 +25,16 @@ class BlogsController extends BaseController
 
 
 		$input = Input::all();
+		$urlParams = array();
 
 		if ((isset($input['viewOnly']) && $input['viewOnly']))
 		{
 			if (isset($input['label']))
 			{
-				$blogposts = Label::find($input['label'])->blogposts()->orderBy('updated_at', 'desc')->get();
+				$blogposts = Label::find($input['label'])->blogposts()->orderBy('updated_at', 'desc')->paginate();
+				$urlParams["label"] = $input['label'];
 			}
-			else $blogposts = Blogpost::orderBy('updated_at', 'desc')->get();			
+			else $blogposts = Blogpost::orderBy('updated_at', 'desc')->paginate();			
 		}
 		else
 		{
@@ -37,18 +48,20 @@ class BlogsController extends BaseController
 				/* user is admin / has permissions to edit ALL posts */
 				if (isset($input['label']))
 				{
-					$blogposts = Label::find($input['label'])->blogposts()->orderBy('updated_at', 'desc')->get();
+					$blogposts = Label::find($input['label'])->blogposts()->orderBy('updated_at', 'desc')->paginate();
+					$urlParams["label"] = $input['label'];
 				}
-				else $blogposts = Blogpost::orderBy('updated_at', 'desc')->get();
+				#else $blogposts = Blogpost::orderBy('updated_at', 'desc')->get();
+				else $blogposts = Blogpost::orderBy('updated_at', 'desc')->paginate();
 			}
 			else
 			{
 				/* he can work with his own items only */
 				if (isset($input['label']))
 				{
-					$blogposts = Label::find($input['label'])->blogposts()->where('user_id', '=', $currentUser->id)->orderBy('updated_at', 'desc')->get();
+					$blogposts = Label::find($input['label'])->blogposts()->where('user_id', '=', $currentUser->id)->orderBy('updated_at', 'desc')->paginate();
 				}
-				else $blogposts = Blogpost::where('user_id', '=', $currentUser->id)->orderBy('updated_at', 'desc')->get();
+				else $blogposts = Blogpost::where('user_id', '=', $currentUser->id)->orderBy('updated_at', 'desc')->paginate();
 			}
 
 		}
@@ -56,7 +69,13 @@ class BlogsController extends BaseController
 		$labels = Label::all();
 
 		
-		return View::make('blogpost.index')->with(array("title" => "Blogs listing", "blogposts" => $blogposts, "labels" => $labels, "currentUser" => $currentUser));
+		return View::make('blogpost.index')
+			->with(array(
+				"title" => "Blogs listing",
+				 "blogposts" => $blogposts,
+				 "labels" => $labels,
+				 "urlParams" => $urlParams,
+				 "currentUser" => $currentUser));
 	}
 
 	public function create()

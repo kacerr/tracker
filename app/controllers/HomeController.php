@@ -15,11 +15,22 @@ class HomeController extends BaseController {
 	|
 	*/
 
+	protected $perPage;
+
+	public function __construct()
+	{
+		$this->perPage = Config::get('tracker.pagination-home');		
+	}	
+
 	public function getIndex()
 	{
         $title = "Index page from the view";
+        $blogposts = Label::find(1)->blogposts()->where('visible', '=', '1')->orderBy('updated_at', 'desc')->paginate($this->perPage);
         return View::make('index')
-        	->with('title', $title);		
+        	->with(array(
+        		'title' => $title,
+        		'blogposts' => $blogposts)
+        	);		
 	}
 
 	public function toggleDebug()

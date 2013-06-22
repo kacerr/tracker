@@ -24,6 +24,7 @@
                 </div>
 				<div style="height:8px; margin-top: 4px; border-top: 1px black solid;">&nbsp;</div>
 			@endforeach
+            {{ $measurements->appends($urlParams)->links(); }}
 		</div>
 	</div>
     <div class="span8 well">

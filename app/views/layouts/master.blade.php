@@ -97,7 +97,11 @@
 					echo "\$_GET :: ";
 					foreach ($_GET as $key => $value)
 					{
-						echo "<b>" . htmlspecialchars($key) ." => </b>$value&nbsp;&nbsp; ";
+						if (is_array($value))
+						{
+							echo "<b>" . $key ." => </b>" . print_r($value, true) . "&nbsp;&nbsp; ";	
+						}
+						else echo "<b>" . $key ." => </b>$value&nbsp;&nbsp; ";
 					}
 					echo "<br>";
 					echo "\$_POST :: ";

@@ -5,7 +5,13 @@ class TodosController extends BaseController
 
 	public function index()
 	{
-		return View::make('todo.index')->with(array("title" => "Todos listing"));
+		$todos = Todo::paginate();
+		return View::make('todo.index')
+			->with(array(
+				"title" => "Todos listing",
+				"urlParams" => array(),
+				"todos" => $todos
+				));
 	}
 
 	public function create()

@@ -35,6 +35,7 @@
 				<div style="height:8px; margin-top: 4px; border-top: 1px black solid;">&nbsp;</div>
 
 			@endforeach
+			{{ $blogposts->appends($urlParams)->links(); }}
 	</div>
 	@if ($currentUser) 
 	<div class="span1 well pull-left">

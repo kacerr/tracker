@@ -14,6 +14,7 @@ class MeasurementsController extends BaseController
 			if we don't have logged user -> redirect to login */
 		if ($currentUser===NULL) return Redirect::to('/login');
 
+		$urlParams = array();
 		$input = Input::all();
 		if (isset($input['json']))
 		{
@@ -52,12 +53,13 @@ class MeasurementsController extends BaseController
 			if (isset($input['name']))
 			{
 				$names = $input['name'];
-				$measurements = User::find($currentUser->id)->measurements()->whereIn('name', $names)->get();
+				$urlParams["name"] = $names;
+				$measurements = User::find($currentUser->id)->measurements()->whereIn('name', $names)->paginate();
 				$graphsRequest = "/measurement/?json=true&name[]=" . implode("&name[]=", $names);
 			}
 			else
 			{
-				$measurements = User::find($currentUser->id)->measurements()->get();
+				$measurements = User::find($currentUser->id)->measurements()->paginate();
 				$names=array();
 				$graphsRequest="";
 			}
@@ -68,6 +70,7 @@ class MeasurementsController extends BaseController
 				"measurements" => $measurements, 
 				"measurementNames" => $measurementNames,
 				"names" => $names,
+				"urlParams" => $urlParams,
 				"graphsRequest" => $graphsRequest)
 			);	
 		} 

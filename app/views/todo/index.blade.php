@@ -13,7 +13,7 @@
 					</a>	
 				</span>
 			</legend>
-			@foreach (Todo::all() as $todo)
+			@foreach ($todos as $todo)
 				@if ($todo->status==3) <?php $statusClass="text-success _completed"; ?>
 				@elseif ($todo->status==2) <?php $statusClass="_in_progress"; ?>
 				@else <?php $statusClass="";?>
@@ -37,6 +37,7 @@
 				
 				<div style="height:8px; margin-top: 4px; border-top: 1px black solid;">&nbsp;</div>
 			@endforeach
+			{{ $todos->appends($urlParams)->links(); }}
 		</div>
 	</div>
 </div>

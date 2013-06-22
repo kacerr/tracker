@@ -2,6 +2,7 @@
 class Blogpost extends Eloquent
 {
 	protected $table = 'blogposts';
+	public $perPage = 6;
 
 	public function Author()
 	{

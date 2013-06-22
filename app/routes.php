@@ -12,6 +12,8 @@ Event::listen('laravel.query', function($sql)
         #echo "COOOOOOO";
 });
 
+
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -47,7 +49,15 @@ Route::resource('measurement', 'MeasurementsController');
 #Route::get('/users','UsersController@actionIndex');
 Route::get('/codetest', function()
 {
+       return View::make('index')->with('title', 'code:test');
+        /* configuration test */
+        define ("PAGINATION_MAIN", Config::get('tracker.pagination-main')); 
+        echo PAGINATION_MAIN;
+
+
         /* flot test */
+        
+        /*
         $sHTML=<<< EOF
                 <html>
                 <script src="/js/jquery.js"></script>
@@ -63,7 +73,7 @@ Route::get('/codetest', function()
                 </html>
 EOF;
         echo ($sHTML);
-        die;
+        die;*/
         
 
         #$bp = Blogpost::find(1);
@@ -80,7 +90,7 @@ EOF;
 
         #Event::fire('laravel.query', array('sql' => 'are you going to do something?'));
         #->insert(array('title' => '1st post','content' => 'blogpost content'));
-        #return View::make('index')->with('title', 'code:test');
+        
 
         
         /*$handle = fopen("http://dev.web-goodies.eu/tmp/auta.txt", "r");

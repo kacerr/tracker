@@ -26,15 +26,15 @@
 		<h4>
 			{{ HTML::link('blogpost?label=2&viewOnly=true','History / changelog') }}
 		</h4>
-		@foreach (Label::find(2)->blogposts()->where('visible', '=', '1')->orderBy('updated_at', 'desc')->get() as $blogpost)
-			<h5 style="">{{ $blogpost->updated_at->format("d.m.Y") }}: {{ $blogpost->title }} </h5> 
-			<p>{{ $blogpost->content }}</p>
+		@foreach (Label::find(2)->blogposts()->where('visible', '=', '1')->orderBy('created_at', 'desc')->get() as $blogpost)
+			<h5 style="">{{ $blogpost->created_at->format("d.m.Y") }}: {{ $blogpost->title }} </h5> 
+			<pre>{{ $blogpost->content }}</pre>
 		@endforeach
 	</div>
 
 
 <div class="row">
-	@foreach (Label::find(1)->blogposts()->where('visible', '=', '1')->orderBy('updated_at', 'desc')->get() as $blogpost)
+	@foreach ($blogposts as $blogpost)
 	<div class="span9 offset3">
 		<div class="hero-unit" style="padding:20px;">
 			<h1 style="">{{ $blogpost->title }} </h1> 
@@ -49,6 +49,7 @@
 			<hr style="border-color:black;">
 			<p>{{ $blogpost->content }}</p>
 		</div>
+		{{ $blogposts->links(); }}
 	</div>
 	@endforeach
 </div>

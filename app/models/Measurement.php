@@ -3,6 +3,7 @@ class Measurement extends Eloquent
 {
 	protected $table = 'measurements';
 	public $timestamps = false;	
+	public $perPage = 10;
 
 	public function Author()
 	{
