@@ -31,6 +31,7 @@ class UsersController extends BaseController
       $credentials = array('email' => $input['email'], 'password' => $input['password']);
       if (Auth::attempt($credentials))
       {
+        
         return Redirect::to('/user/dashboard')->with('flash_notice', 'You are successfully logged in.');
       }
       else
@@ -177,8 +178,26 @@ class UsersController extends BaseController
  public function getProfile()
   {
     $title = "PROFILE";
+
+    if (Auth::user()) $currentUser = Auth::user();
+    else $currentUser = null;
+
+    /* TODO: probably move to filter 
+      if we don't have logged user -> redirect to login */
+    if ($currentUser===NULL) return Redirect::to('/login');
+
+    #$extendedAttributes = $currentUser->with('ExtendedAttribute'->all();
+    $extendedAttributes = $currentUser->extendedAttributes()->with('ExtendedAttributeType')->get();
+    $attributeTypes = ExtendedAttributeType::all();
+    #return $extAttributes;
+
     return View::make('user.profile')
-      ->with('title', $title);
+      ->with(array(
+        'title' => $title,
+        'user' => $currentUser,
+        'extendedAttributes' => $extendedAttributes,
+        'attributeTypes' => $attributeTypes
+        ));
   } 
 
 

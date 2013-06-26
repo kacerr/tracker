@@ -15,9 +15,15 @@ class User extends Eloquent implements UserInterface
   {
     return $this->hasMany('Blogpost');
   }
+
   public function measurements()
   {
     return $this->hasMany('Measurement');
+  }
+
+  public function extendedAttributes()
+  {
+    return $this->morphMany('ExtendedAttribute', 'extendable', 'parentType', 'parentID');
   }
 
   /**

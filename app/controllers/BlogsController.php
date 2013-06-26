@@ -80,7 +80,11 @@ class BlogsController extends BaseController
 
 	public function create()
 	{
-		return View::Make('blogpost.new')->with(array("title" => "Blogs - add blogpost", "setLabels" => null));;
+		return View::Make('blogpost.new')->with(array(
+			"title" => "Blogs - add blogpost", 
+			"setLabels" => null,
+			"action" => "new"
+			));
 	}
 
 	public function destroy($id)
@@ -94,7 +98,15 @@ class BlogsController extends BaseController
 	{
 		$blogpost = Blogpost::find($id);
 		$setLabels = $blogpost->labels()->get();
-		return View::Make('blogpost.new')->with(array("title" => "Blogs - edit blogpost", "action" => "edit", "blogpost" => $blogpost, "setLabels" => $setLabels));
+	    $extendedAttributes = $blogpost->extendedAttributes()->with('ExtendedAttributeType')->get();
+	    $attributeTypes = ExtendedAttributeType::all();		
+		return View::Make('blogpost.new')->with(array(
+			"title" => "Blogs - edit blogpost", 
+			"action" => "edit", 
+			"blogpost" => $blogpost, 
+	        'extendedAttributes' => $extendedAttributes,
+	        'attributeTypes' => $attributeTypes,
+			"setLabels" => $setLabels));
 	}
 
 

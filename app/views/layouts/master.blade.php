@@ -89,6 +89,7 @@
  <div class="row">
  	<div class="span16" id="footer">
 		<div class="container" style="margin: 15px; width: 99%;">
+		 	<div id="jQuerydebugWindow"></div>
 			<p class="muted credit" style="margin-top: 5px;">
 				<?php
 					echo "Input::all() :: ";

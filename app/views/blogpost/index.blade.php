@@ -38,7 +38,7 @@
 			{{ $blogposts->appends($urlParams)->links(); }}
 	</div>
 	@if ($currentUser) 
-	<div class="span1 well pull-left">
+	<div class="span2 well pull-left">
 		Labels: <br>
 		{{ HTML::link('blogpost', 'all') }}
 		<br>
@@ -48,8 +48,9 @@
 		@endforeach
 	</div>
 	@endif
+
 </div>
-@stop
+
 
 <!-- Modal deletion confirmation -->
 <div id="confirmDeleteDialog" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -68,3 +69,5 @@
     </form>
   </div>
 </div>
+
+@stop

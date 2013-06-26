@@ -14,6 +14,11 @@ class Blogpost extends Eloquent
 		return $this->belongsToMany('Label', 'blogpost_labels', 'blogpost_id', 'label_id');
 	}
 
+    public function extendedAttributes()
+	{
+    	return $this->morphMany('ExtendedAttribute', 'extendable', 'parentType', 'parentID');
+    }
+
 	public function getHTMLContent()
 	{
 		return str_replace("\n", "<br>", $this->content);

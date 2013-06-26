@@ -17,3 +17,10 @@
 		$('#deleteForm').attr('action', '/' + action + '/' + id);
 		$('#confirmDeleteDialog').modal();
 	}
+
+	var jsDebugEnabled=true;
+	/* jsDebug function used mostly for debugging ajax calls */
+    function jsDebug(message)
+    {
+         if (jsDebugEnabled) $('#jQuerydebugWindow').append(message).append('<br>');
+    }

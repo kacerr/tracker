@@ -1,0 +1,12 @@
+user.name=Honza Novak
+user.email=kacerr.cz@gmail.com
+credential.helper=osxkeychain
+color.ui=true
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+core.ignorecase=true
+core.precomposeunicode=false
+remote.origin.url=https://github.com/kacerr/tracker.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*

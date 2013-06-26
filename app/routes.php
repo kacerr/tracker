@@ -43,6 +43,7 @@ Route::get('profile', 'UsersController@getProfile');
 Route::resource('blogpost', 'BlogsController');
 Route::resource('todo', 'TodosController');
 Route::resource('measurement', 'MeasurementsController');
+Route::resource('extendedAttribute', 'ExtendedAttributesController');
 #Route::get('blog', 'BlogsController@show');
 #Route::controller('blog', 'BlogsController');
 #Route::controller('users', 'UsersController');
