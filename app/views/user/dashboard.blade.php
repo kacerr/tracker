@@ -24,6 +24,19 @@
 				<a href="/measurement">blogs & notes</a>
 			</div>
 		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="span6 offset3" style="padding:5px;">
+		<div class="row" style="line-height:20px;">&nbsp;</div>
+		<div class="span3 pull-left">
+			<div class="span3" style="">
+				<a href="/challenges"><img src="/images/home/challenge.jpg" width="200" height="200" class="img-circle"></a>
+			</div>
+			<div class="span3" style="text-align: center;">
+				<a href="/challenges">challenges</a>
+			</div>
+		</div>
 	</div>	
 </div>
 @stop

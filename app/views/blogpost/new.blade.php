@@ -33,6 +33,14 @@
 						<label for "{{ $label->id }}" style="display: inline;">{{$label->label}}</label>
 				@endforeach
 			</div>
+			<div class="control-group">
+				Blogpost type: 
+				@if ($action=="edit")
+					{{ Form::select('type', Blogpost::$blogPostTypes, $blogpost->type) }}
+				@else
+					{{ Form::select('type', Blogpost::$blogPostTypes) }}
+				@endif
+			</div>
 			{{ Form::submit('Save post', array('class' => 'btn btn-warning')) }}
 
 			{{ Form::close() }}

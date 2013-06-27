@@ -98,8 +98,11 @@ class BlogsController extends BaseController
 	{
 		$blogpost = Blogpost::find($id);
 		$setLabels = $blogpost->labels()->get();
+	    //$extendedAttributes = $blogpost->extendedAttributes()->with('ExtendedAttributeType')->whereIn('id', Blogpost::$blogTypeExtendedAttributes[$blogpost->type])->get();
 	    $extendedAttributes = $blogpost->extendedAttributes()->with('ExtendedAttributeType')->get();
-	    $attributeTypes = ExtendedAttributeType::all();		
+		/* we first fill "main" extended attributes */
+	    $attributeTypes = ExtendedAttributeType::whereIn('id', Blogpost::$blogTypeExtendedAttributes[$blogpost->type])->get();
+	    /* and so far we omit the rest of available attributes */	
 		return View::Make('blogpost.new')->with(array(
 			"title" => "Blogs - edit blogpost", 
 			"action" => "edit", 
@@ -139,6 +142,7 @@ class BlogsController extends BaseController
 	    		$blogpost = new Blogpost;
 	    		$blogpost->user_id = Auth::user()->id;
 			}
+    		$blogpost->type = $input['type'];
     		$blogpost->title = $input['title'];
     		$blogpost->content = $input['content'];
     		if (isset($input['visible']) &&  $input['visible']=="1") $blogpost->visible=true;

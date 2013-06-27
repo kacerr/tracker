@@ -40,6 +40,11 @@ Route::post('register', 'UsersController@postRegister');
 Route::get('profile', 'UsersController@getProfile');
 #Route::get('/','HomeController@actionIndex');
 
+# challenges user interface routes (administration through blogpost)
+Route::get('challenges', 'ChallengesController@index');
+Route::post('challenges', 'ChallengesController@process');
+
+
 Route::resource('blogpost', 'BlogsController');
 Route::resource('todo', 'TodosController');
 Route::resource('measurement', 'MeasurementsController');
@@ -50,7 +55,12 @@ Route::resource('extendedAttribute', 'ExtendedAttributesController');
 #Route::get('/users','UsersController@actionIndex');
 Route::get('/codetest', function()
 {
-       return View::make('index')->with('title', 'code:test');
+    $challenges = Auth::user()->challenges()->get();
+    $challengers = Challenge::find(20)->challengers()->get();
+    var_dump ($challengers);
+       //$challengers = Challenge::find(1)->challengers->get();
+
+       #return View::make('index')->with('title', 'code:test');
         /* configuration test */
         define ("PAGINATION_MAIN", Config::get('tracker.pagination-main')); 
         echo PAGINATION_MAIN;
